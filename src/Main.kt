@@ -47,16 +47,12 @@ fun isValidUsername(username: String): Boolean {
     var usrnmspecial = true
 
     if ((username.length < 3) or (username.length > 20)) { usrnmlength = false }
-    if (username.filter { !it.isLetterOrDigit() }.firstOrNull() != null) {usrnmspecial = false}
+    if (username.filter { !(it.isLetterOrDigit() || it in listOf('.', '_', '@')) }.firstOrNull() != null) {usrnmspecial = false}
 
     println("")
     println("Username:")
     println("Between 3 and 20 characters: $usrnmlength")
-    println("No special characters except for \".\", \"._\" and \"@\": $usrnmspecial")
+    println("No special characters except for \".\", \"_\" and \"@\": $usrnmspecial")
 
-    return if ((usrnmlength) and (usrnmspecial)) {
-        (true)
-    } else {
-        (false)
-    }
+    return usrnmlength && usrnmspecial
 }
