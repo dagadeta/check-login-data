@@ -21,22 +21,22 @@ fun isValidPassword(password: String, usertype: Int): Boolean {
 
     if (usertype == 1) {
         if (password.length < 8) { pwdlength = false }
-        if (countNumbers(password) < 1) {pwddigit = false}
-        if (countUpperCaseLetters(password) < 1) { pwdupper = false }
-        if (countLowerCaseLetters(password) < 1) { pwdlower = false }
-        if (countSpecialCharacters(password) < 1) { pwdspecial = false }
+        if (count(password, "digits") < 1) {pwddigit = false}
+        if (count(password, "upper") < 1) { pwdupper = false }
+        if (count(password, "lower") < 1) { pwdlower = false }
+        if (count(password, "special") < 1) { pwdspecial = false }
     } else if (usertype == 2) {
         if (password.length < 15) { pwdlength = false }
-        if (countNumbers(password) < 2) {pwddigit = false}
-        if (countUpperCaseLetters(password) < 2) { pwdupper = false }
-        if (countLowerCaseLetters(password) < 2) { pwdlower = false }
-        if (countSpecialCharacters(password) < 2) { pwdspecial = false }
+        if (count(password, "digits") < 2) {pwddigit = false}
+        if (count(password, "upper") < 2) { pwdupper = false }
+        if (count(password, "lower") < 2) { pwdlower = false }
+        if (count(password, "special") < 2) { pwdspecial = false }
     } else if (usertype == 3) {
         if (password.length < 25) { pwdlength = false }
-        if (countNumbers(password) < 4) {pwddigit = false}
-        if (countUpperCaseLetters(password) < 4) { pwdupper = false }
-        if (countLowerCaseLetters(password) < 4) { pwdlower = false }
-        if (countSpecialCharacters(password) < 4) { pwdspecial = false }
+        if (count(password, "digits") < 4) {pwddigit = false}
+        if (count(password, "upper") < 4) { pwdupper = false }
+        if (count(password, "lower") < 4) { pwdlower = false }
+        if (count(password, "special") < 4) { pwdspecial = false }
     }
 
     println("")
@@ -69,38 +69,17 @@ fun isValidUsername(username: String): Boolean {
     return usrnmlength && usrnmspecial
 }
 
-fun countNumbers(password: String): Int {
-    val regex = "\\d+".toRegex()
-    val matches = regex.findAll(password)
-    var count = 0
-    for (match in matches) {
-        count++
+fun count(password: String, type: String): Int {
+    var regex = "".toRegex()
+    if (type == "digits") {
+        regex = "\\d+".toRegex()
+    } else if (type == "upper") {
+        regex = "[A-Z]".toRegex()
+    } else if (type == "lower") {
+        regex = "[a-z]".toRegex()
+    } else if (type == "special") {
+        regex = "[^A-Za-z0-9\\s]".toRegex()
     }
-    return count
-}
-
-fun countUpperCaseLetters(password: String): Int {
-    val regex = "[A-Z]".toRegex()
-    val matches = regex.findAll(password)
-    var count = 0
-    for (match in matches) {
-        count++
-    }
-    return count
-}
-
-fun countLowerCaseLetters(password: String): Int {
-    val regex = "[a-z]".toRegex()
-    val matches = regex.findAll(password)
-    var count = 0
-    for (match in matches) {
-        count++
-    }
-    return count
-}
-
-fun countSpecialCharacters(password: String): Int {
-    val regex = "[^A-Za-z0-9\\s]".toRegex()
     val matches = regex.findAll(password)
     var count = 0
     for (match in matches) {
