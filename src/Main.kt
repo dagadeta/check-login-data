@@ -8,7 +8,6 @@ fun main() {
     val usertypeInt = usertype.toInt()
 
     println("Password is valid: " + isValidPassword(password, usertypeInt))
-
     println("Username is valid: " + isValidUsername(username))
 }
 
@@ -21,19 +20,19 @@ fun isValidPassword(password: String, usertype: Int): Boolean {
 
     if (usertype == 1) {
         if (password.length < 8) { pwdlength = false }
-        if (count(password, "digits") < 1) {pwddigit = false}
+        if (count(password, "digits") < 1) { pwddigit = false }
         if (count(password, "upper") < 1) { pwdupper = false }
         if (count(password, "lower") < 1) { pwdlower = false }
         if (count(password, "special") < 1) { pwdspecial = false }
     } else if (usertype == 2) {
         if (password.length < 15) { pwdlength = false }
-        if (count(password, "digits") < 2) {pwddigit = false}
+        if (count(password, "digits") < 2) { pwddigit = false }
         if (count(password, "upper") < 2) { pwdupper = false }
         if (count(password, "lower") < 2) { pwdlower = false }
         if (count(password, "special") < 2) { pwdspecial = false }
     } else if (usertype == 3) {
         if (password.length < 25) { pwdlength = false }
-        if (count(password, "digits") < 4) {pwddigit = false}
+        if (count(password, "digits") < 4) { pwddigit = false }
         if (count(password, "upper") < 4) { pwdupper = false }
         if (count(password, "lower") < 4) { pwdlower = false }
         if (count(password, "special") < 4) { pwdspecial = false }
@@ -47,11 +46,7 @@ fun isValidPassword(password: String, usertype: Int): Boolean {
     println("Lowercase: $pwdlower")
     println("Special: $pwdspecial")
 
-    return if ((pwdlength) and (pwddigit) and (pwdupper) and (pwdlower) and (pwdspecial)) {
-        (true)
-    } else {
-        (false)
-    }
+    return pwdlength && pwddigit && pwdupper && pwdlower && pwdspecial
 }
 
 fun isValidUsername(username: String): Boolean {
