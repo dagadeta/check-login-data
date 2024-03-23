@@ -34,10 +34,10 @@ fun isValidPassword(password: String, usertype: Int): Boolean {
 
 private fun checkPasswordProperties(password: String, minLength: Int, minOther: Int) = PasswordProperties(
     length = password.length >= minLength,
-    digits = count(password, "digits") >= minOther,
-    upper = count(password, "upper") >= minOther,
-    lower = count(password, "lower") >= minOther,
-    special = count(password, "special") >= minOther
+    digits = password.count("digits") >= minOther,
+    upper = password.count("upper") >= minOther,
+    lower = password.count("lower") >= minOther,
+    special = password.count("special") >= minOther
 )
 
 fun isValidUsername(username: String): Boolean {
@@ -54,18 +54,10 @@ fun isValidUsername(username: String): Boolean {
     return userNameLength && userNameSpecial
 }
 
-fun count(password: String, type: String): Int {
-    var regex = "".toRegex()
-    when (type) {
-        "digits" -> regex = "\\d+".toRegex()
-        "upper" -> regex = "[A-Z]".toRegex()
-        "lower" -> regex = "[a-z]".toRegex()
-        "special" -> regex = "[^A-Za-z0-9\\s]".toRegex()
-    }
-    val matches = regex.findAll(password)
-    var count = 0
-    for (match in matches) {
-        count++
-    }
-    return count
-}
+fun String.count(type: String) = when (type) {
+    "digits" -> "\\d+"
+    "upper" -> "[A-Z]"
+    "lower" -> "[a-z]"
+    "special" -> "[^A-Za-z0-9\\s]"
+    else -> ""
+}.toRegex().findAll(this).count()
