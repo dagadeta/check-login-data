@@ -4,76 +4,63 @@ fun main() {
     print("Please type your username: ")
     val username = readln()
     print("Please type your type of user (1/2/3): ")
-    val usertype = readln()
-    val usertypeInt = usertype.toInt()
+    val userType = readln()
+    val userTypeInt = userType.toInt()
 
-    println("Password is valid: " + isValidPassword(password, usertypeInt))
+    println("Password is valid: " + isValidPassword(password, userTypeInt))
     println("Username is valid: " + isValidUsername(username))
 }
 
-fun isValidPassword(password: String, usertype: Int): Boolean {
-    var pwdlength = true
-    var pwddigit = true
-    var pwdupper = true
-    var pwdlower = true
-    var pwdspecial = true
+data class PasswordProperties(val length: Boolean, val digits: Boolean, val upper: Boolean, val lower: Boolean, val special: Boolean)
 
-    if (usertype == 1) {
-        if (password.length < 8) { pwdlength = false }
-        if (count(password, "digits") < 1) { pwddigit = false }
-        if (count(password, "upper") < 1) { pwdupper = false }
-        if (count(password, "lower") < 1) { pwdlower = false }
-        if (count(password, "special") < 1) { pwdspecial = false }
-    } else if (usertype == 2) {
-        if (password.length < 15) { pwdlength = false }
-        if (count(password, "digits") < 2) { pwddigit = false }
-        if (count(password, "upper") < 2) { pwdupper = false }
-        if (count(password, "lower") < 2) { pwdlower = false }
-        if (count(password, "special") < 2) { pwdspecial = false }
-    } else if (usertype == 3) {
-        if (password.length < 25) { pwdlength = false }
-        if (count(password, "digits") < 4) { pwddigit = false }
-        if (count(password, "upper") < 4) { pwdupper = false }
-        if (count(password, "lower") < 4) { pwdlower = false }
-        if (count(password, "special") < 4) { pwdspecial = false }
+fun isValidPassword(password: String, usertype: Int): Boolean {
+    val passwordProperties = when (usertype) {
+        1 -> checkPasswordProperties(password, 8, 1)
+        2 -> checkPasswordProperties(password, 15, 2)
+        3 -> checkPasswordProperties(password, 25, 4)
+        else -> throw IllegalArgumentException("1/2/3 as user type expected")
     }
 
     println("")
     println("Password:")
-    println("Length: $pwdlength")
-    println("Digit: $pwddigit")
-    println("Uppercase: $pwdupper")
-    println("Lowercase: $pwdlower")
-    println("Special: $pwdspecial")
+    println("Length: ${passwordProperties.length}")
+    println("Digit: ${passwordProperties.digits}")
+    println("Uppercase: ${passwordProperties.upper}")
+    println("Lowercase: ${passwordProperties.lower}")
+    println("Special: ${passwordProperties.special}")
 
-    return pwdlength && pwddigit && pwdupper && pwdlower && pwdspecial
+    return passwordProperties.length && passwordProperties.digits && passwordProperties.upper && passwordProperties.lower && passwordProperties.special
 }
 
-fun isValidUsername(username: String): Boolean {
-    var usrnmlength = true
-    var usrnmspecial = true
+private fun checkPasswordProperties(password: String, minLength: Int, minOther: Int) = PasswordProperties(
+    length = password.length >= minLength,
+    digits = count(password, "digits") >= minOther,
+    upper = count(password, "upper") >= minOther,
+    lower = count(password, "lower") >= minOther,
+    special = count(password, "special") >= minOther
+)
 
-    if ((username.length < 3) or (username.length > 20)) { usrnmlength = false }
-    if (username.filter { !(it.isLetterOrDigit() || it in listOf('.', '_', '@')) }.firstOrNull() != null) {usrnmspecial = false}
+fun isValidUsername(username: String): Boolean {
+    var userNameLength = true
+
+    if ((username.length < 3) or (username.length > 20)) { userNameLength = false }
+    val userNameSpecial = username.firstOrNull { !(it.isLetterOrDigit() || it in listOf('.', '_', '@')) } == null
 
     println("")
     println("Username:")
-    println("Between 3 and 20 characters: $usrnmlength")
-    println("No special characters except for \".\", \"_\" and \"@\": $usrnmspecial")
+    println("Between 3 and 20 characters: $userNameLength")
+    println("No special characters except for \".\", \"_\" and \"@\": $userNameSpecial")
 
-    return usrnmlength && usrnmspecial
+    return userNameLength && userNameSpecial
 }
 
 fun count(password: String, type: String): Int {
     var regex = "".toRegex()
-    if (type == "digits") {
-        regex = "\\d+".toRegex()
-    } else if (type == "upper") {
-        regex = "[A-Z]".toRegex()
-    } else if (type == "lower") {
-        regex = "[a-z]".toRegex()
-    } else if (type == "special") {
-        regex = "[^A-Za-z0-9\\s]".toRegex()
+    when (type) {
+        "digits" -> regex = "\\d+".toRegex()
+        "upper" -> regex = "[A-Z]".toRegex()
+        "lower" -> regex = "[a-z]".toRegex()
+        "special" -> regex = "[^A-Za-z0-9\\s]".toRegex()
     }
     val matches = regex.findAll(password)
     var count = 0
