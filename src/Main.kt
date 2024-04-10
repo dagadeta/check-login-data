@@ -21,8 +21,7 @@ fun isValidPassword(password: String, usertype: Int): Boolean {
         else -> throw IllegalArgumentException("1/2/3 as user type expected")
     }
 
-    println("")
-    println("Password:")
+    println("\nPassword:")
     println("Length: ${passwordProperties.length}")
     println("Digit: ${passwordProperties.digits}")
     println("Uppercase: ${passwordProperties.upper}")
@@ -46,8 +45,7 @@ fun isValidUsername(username: String): Boolean {
     if ((username.length < 3) or (username.length > 20)) { userNameLength = false }
     val userNameSpecial = username.firstOrNull { !(it.isLetterOrDigit() || it in listOf('.', '_', '@')) } == null
 
-    println("")
-    println("Username:")
+    println("\nUsername:")
     println("Between 3 and 20 characters: $userNameLength")
     println("No special characters except for \".\", \"_\" and \"@\": $userNameSpecial")
 
